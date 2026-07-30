@@ -1,62 +1,56 @@
 # Dicta
 
-Dictado por voz para macOS. Vive en la barra de menús: mantienes presionada
-una tecla, hablas, la sueltas — y el texto se escribe donde esté tu cursor,
-en cualquier app (Slack, correo, navegador, editores).
+Voice dictation for macOS. Lives in the menu bar: hold a key, talk,
+let go — and the text is typed wherever your cursor is, in any app
+(Slack, email, browser, editors).
 
-**Descarga:** https://github.com/aaronxmrquez/speech-app/releases/latest/download/Dicta.dmg
+**Download:** https://github.com/aaronxmrquez/dicta-app/releases/latest/download/Dicta.dmg
 
-Requisitos: Mac con Apple Silicon (M1+) y macOS 14+. La app no está
-notarizada: la primera apertura pide "Abrir de todos modos" en Ajustes del
-Sistema → Privacidad y seguridad.
+Requirements: Mac with Apple Silicon (M1+) and macOS 14+. The app is
+not notarized, so the first launch asks you to click "Open anyway"
+in System Settings → Privacy & Security.
 
-## Uso
+## Use
 
-- **Mantener tecla** (por defecto ⌘ derecha; cambiable a ⌥ derecha o fn):
-  mantén, habla, suelta. **Esc** cancela. Los atajos normales (⌘C…) siguen
-  funcionando mientras dictas.
-- **Alternar**: ⌥ Espacio inicia/detiene (elegible en Settings).
-- **Idioma**: Auto (detección automática es/en con Whisper), Español o English.
-- **History**: los últimos 100 dictados, clic para copiar. Local siempre.
-- La UI de la app está en inglés; branding: carbón + Space Mono + Inter con
-  acento verde, splash de bienvenida en la primera instalación.
+- **Hold to talk:** (right ⌘ by default; switchable to right ⌥ or fn): hold, speak, release.
+  Esc cancels. Regular shortcuts (⌘C…) keep working while you dictate.
+- **Toggle mode:** ⌥ Space starts and stops (selectable in Settings).
+- **Language:** Auto (automatic es/en detection with Whisper), Spanish, or English.
+- **History:** the last 100 dictations, click to copy. Always local.
+- The app UI is in English. Branding: charcoal + Space Mono + Inter with a green accent,
+  plus a welcome splash on first install.
 
-## Motores
+## Engines
+- **Whisper (default):** whisper.cpp + Metal, quantized large-v3-turbo model (574 MB, downloaded
+  once from Settings). Highest accuracy in Spanish and English, 100% local. Hybrid:
+  live partials from Apple's engine, final text from Whisper (~1s).
+- **Apple:** SFSpeechRecognizer. No downloads, lighter.
 
-- **Whisper (por defecto)**: whisper.cpp + Metal, modelo large-v3-turbo
-  cuantizado (574 MB, se descarga desde Settings una sola vez). Máxima
-  precisión en español e inglés, 100 % local. Híbrido: parciales en vivo con
-  el motor de Apple, texto final de Whisper (~1 s).
-- **Apple**: SFSpeechRecognizer. Sin descargas, más liviano.
+
 
 ## Build
-
-```sh
-./build.sh release            # compila y ensambla build/Dicta.app
-./build.sh release install    # además instala en /Applications
-./build.sh release dmg        # genera build/Dicta.dmg distribuible
+```bash
+./build.sh release            # compiles and assembles build/Dicta.app
+./build.sh release install    # also installs to /Applications
+./build.sh release dmg        # generates a distributable build/Dicta.dmg
 ```
+Notes for this machine: compiles with `swiftc` directly against the macOS 15.5 SDK
+(SwiftPM from the CLT is broken — see the comment in `build.sh`). whisper.cpp is cloned
+and built into `vendor/` on the first run. Signing uses the local "Dicta Local Signing"
+certificate if present (`Support/make_signing_cert.sh`); without it, it falls back to ad-hoc.
 
-Notas de esta máquina: compila con `swiftc` directo contra el SDK de macOS
-15.5 (el SwiftPM de los CLT está roto — ver comentario en `build.sh`).
-whisper.cpp se clona y compila solo en `vendor/` la primera vez. La firma usa
-el certificado local "Dicta Local Signing" si existe
-(`Support/make_signing_cert.sh`); sin él cae a ad-hoc.
+Brand assets live in `Support/`: logo, app icon and menu bar icon (`make_icon.swift` regenerates them), 
+splash pattern (SVG from Figma), and embedded Space Mono / Inter fonts (OFL).
 
-Assets de marca en `Support/`: logo, ícono de app y de barra de menús
-(`make_icon.swift` los regenera), patrón del splash (SVG de Figma) y fuentes
-Space Mono/Inter embebidas (OFL).
 
-## Arquitectura
 
-`HotkeyMonitor` (CGEventTap) → `AppState` (idle → grabando → transcribiendo →
-insertando) → `AudioRecorder` (AVAudioEngine) alimenta al motor activo →
-HUD flotante (`NSPanel` no activante) con parciales en vivo → `TextInserter`
-(portapapeles + ⌘V sintético + restauración).
+## Architecture
 
-Los motores implementan el protocolo `TranscriptionEngine`
-(Sources/Dicta/Transcription/): agregar uno nuevo no toca el resto.
+`HotkeyMonitor` (CGEventTap) → `AppState` (idle → recording → transcribing → inserting) → `AudioRecorder` 
+(AVAudioEngine) feeds the active engine → floating HUD (non-activating `NSPanel`) with live partials → `TextInserter` (clipboard + synthetic ⌘V + restore).
 
-Modos de desarrollo: `--render-previews <dir>` (renderiza las vistas a PNG),
-`--transcribe-file <audio> [es|en|auto]` (prueba el motor sin micrófono),
-`--splash` (muestra el splash de bienvenida).
+Engines implement the `TranscriptionEngine` protocol (Sources/Dicta/Transcription/): 
+adding a new one doesn't touch the rest.
+
+Development modes: `--render-previews <dir>` (renders the views to PNG), `--transcribe-file <audio> [es|en|auto]` 
+(tests the engine without a microphone), `--splash` (shows the welcome splash).
