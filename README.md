@@ -1,3 +1,4 @@
+
 # Dicta
 
 Voice dictation for macOS. Lives in the menu bar: hold a key, talk,
@@ -10,6 +11,7 @@ Requirements: Mac with Apple Silicon (M1+) and macOS 14+. The app is
 not notarized, so the first launch asks you to click "Open anyway"
 in System Settings → Privacy & Security.
 
+
 ## Use
 
 - **Hold to talk:** (right ⌘ by default; switchable to right ⌥ or fn): hold, speak, release.
@@ -19,6 +21,10 @@ in System Settings → Privacy & Security.
 - **History:** the last 100 dictations, click to copy. Always local.
 - The app UI is in English. Branding: charcoal + Space Mono + Inter with a green accent,
   plus a welcome splash on first install.
+
+## Demo
+  https://github.com/user-attachments/assets/dc0e54e2-3521-42bf-b996-8782b8bcb562
+
 
 ## Engines
 - **Whisper (default):** whisper.cpp + Metal, quantized large-v3-turbo model (574 MB, downloaded
