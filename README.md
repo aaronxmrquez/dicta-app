@@ -5,7 +5,7 @@ Voice dictation for macOS. Lives in the menu bar: hold a key, talk,
 let go — and the text is typed wherever your cursor is, in any app
 (Slack, email, browser, editors).
 
-**Download:** https://github.com/aaronxmrquez/dicta-app/releases/latest/download/Dicta.dmg
+[DOWNLOAD HERE](https://github.com/aaronxmrquez/dicta-app/releases/latest/download/Dicta.dmg)
 
 Requirements: Mac with Apple Silicon (M1+) and macOS 14+. The app is
 not notarized, so the first launch asks you to click "Open anyway"
@@ -23,7 +23,10 @@ in System Settings → Privacy & Security.
   plus a welcome splash on first install.
 
 ## Demo
-  https://github.com/user-attachments/assets/dc0e54e2-3521-42bf-b996-8782b8bcb562
+
+
+https://github.com/user-attachments/assets/7e0714d4-d418-4a83-90a2-d2c238a2155b
+
 
 
 ## Engines
