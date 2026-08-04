@@ -25,7 +25,10 @@ in System Settings → Privacy & Security.
 ## Demo
 
 
-https://github.com/user-attachments/assets/7e0714d4-d418-4a83-90a2-d2c238a2155b
+
+https://github.com/user-attachments/assets/c692d239-8d69-4dc6-a63a-73052c4806ac
+
+
 
 
 
